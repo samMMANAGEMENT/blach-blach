@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
 
 import { useCart } from "@/context/CartContext";
 
@@ -45,11 +46,15 @@ export default function ProductCard({ product }: ProductProps) {
                         <span className="absolute block font-display text-4xl text-zinc-700 select-none opacity-20 transform -rotate-12">
                             BLACH
                         </span>
-                        <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-3/4 h-3/4 object-contain group-hover:scale-110 transition-transform duration-500 relative z-10"
-                        />
+                        <div className="relative w-3/4 h-3/4 group-hover:scale-110 transition-transform duration-500 z-10">
+                            <Image
+                                src={product.image}
+                                alt={product.name}
+                                fill
+                                className="object-contain"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -82,7 +87,7 @@ export default function ProductCard({ product }: ProductProps) {
             </div>
 
             <div className="flex items-center justify-between mt-auto">
-                <span className="text-2xl font-black text-primary">${product.price.toLocaleString()}</span>
+                <span className="text-2xl font-black text-primary">{formatPrice(product.price)}</span>
                 <button
                     onClick={handleAddToCart}
                     className="bg-zinc-800 text-white p-3 hover:bg-primary transition-colors flex items-center justify-center"

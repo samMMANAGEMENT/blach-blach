@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface ProductGalleryProps {
     mainImage: string;
@@ -21,11 +22,18 @@ export default function ProductGallery({ mainImage, gallery, name }: ProductGall
                         BLACH BLACH
                     </span>
                 </div>
-                <img
-                    src={activeImage}
-                    alt={name}
-                    className="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-500 relative z-10"
-                />
+                {activeImage && (
+                    <div className="relative w-full h-full p-8 z-10">
+                        <Image
+                            src={activeImage}
+                            alt={name}
+                            fill
+                            className="object-contain group-hover:scale-105 transition-transform duration-500"
+                            priority
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                        />
+                    </div>
+                )}
                 <div className="absolute top-4 left-4 bg-primary text-white text-[10px] font-black px-3 py-1 uppercase tracking-widest italic z-20">
                     Premium
                 </div>
@@ -37,14 +45,20 @@ export default function ProductGallery({ mainImage, gallery, name }: ProductGall
                     <button
                         key={idx}
                         onClick={() => setActiveImage(img)}
-                        className={`aspect-square bg-zinc-900 rounded-lg border overflow-hidden transition-all ${activeImage === img ? "border-primary ring-1 ring-primary" : "border-zinc-800 hover:border-primary/50"
+                        className={`aspect-square relative bg-zinc-900 rounded-lg border overflow-hidden transition-all ${activeImage === img ? "border-primary ring-1 ring-primary" : "border-zinc-800 hover:border-primary/50"
                             }`}
                     >
-                        <img
-                            src={img}
-                            alt={`${name} thumbnail ${idx + 1}`}
-                            className={`w-full h-full object-cover p-2 ${activeImage === img ? "opacity-100" : "opacity-50"}`}
-                        />
+                        {img && (
+                            <div className={`w-full h-full relative p-2 ${activeImage === img ? "opacity-100" : "opacity-50"}`}>
+                                <Image
+                                    src={img}
+                                    alt={`${name} thumbnail ${idx + 1}`}
+                                    fill
+                                    className="object-contain"
+                                    sizes="120px"
+                                />
+                            </div>
+                        )}
                     </button>
                 ))}
                 {/* Placeholder for video toggle if images < 4 */}

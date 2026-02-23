@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
+import { formatPrice } from '@/lib/utils';
 
 export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const { cart, removeFromCart, updateQuantity, subtotal } = useCart();
@@ -82,7 +83,7 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClo
                                                         +
                                                     </button>
                                                 </div>
-                                                <span className="text-sm font-bold text-primary">${(item.price * item.quantity).toLocaleString()}</span>
+                                                <span className="text-sm font-bold text-primary">{formatPrice(item.price * item.quantity)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -107,7 +108,7 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClo
                         <div className="p-6 border-t border-zinc-800 bg-zinc-900/50 space-y-4">
                             <div className="flex justify-between items-center">
                                 <span className="text-zinc-400 text-sm uppercase tracking-widest">Subtotal</span>
-                                <span className="text-2xl font-display font-bold text-primary">${subtotal.toLocaleString()}</span>
+                                <span className="text-2xl font-display font-bold text-primary">{formatPrice(subtotal)}</span>
                             </div>
                             <p className="text-[10px] text-zinc-500 uppercase tracking-tighter">Impuestos y envío calculados al finalizar la compra.</p>
                             <Link

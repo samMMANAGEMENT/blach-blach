@@ -1,7 +1,42 @@
+"use client";
+
 import { BRAND_CONFIG } from "@/configs/brand";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Footer() {
+    const [email, setEmail] = useState("");
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [message, setMessage] = useState("");
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setStatus("loading");
+        try {
+            const res = await fetch("/api/newsletter", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setStatus("success");
+                setMessage("¡Gracias por suscribirte!");
+                setEmail("");
+            } else {
+                setStatus("error");
+                setMessage(data.error || "Algo salió mal");
+            }
+        } catch (error) {
+            setStatus("error");
+            setMessage("Error de conexión");
+        }
+    };
+
     return (
         <footer className="bg-zinc-950 pt-24 pb-12 border-t border-zinc-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,16 +97,32 @@ export default function Footer() {
                     <div>
                         <h4 className="font-display font-black mb-8 uppercase tracking-[0.2em] text-xs text-white">Boletín</h4>
                         <p className="text-xs text-gray-500 mb-6 leading-relaxed">Recibe consejos de detallado y ofertas exclusivas.</p>
-                        <div className="flex bg-zinc-900 p-1 border border-zinc-800 focus-within:border-primary transition-colors">
+                        <form onSubmit={handleSubmit} className="flex bg-zinc-900 p-1 border border-zinc-800 focus-within:border-primary transition-colors">
                             <input
                                 type="email"
                                 placeholder="Tu email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="bg-transparent border-none px-4 py-3 text-sm grow outline-none text-white w-full"
+                                required
                             />
-                            <button className="bg-primary px-5 py-3 hover:bg-secondary transition-colors text-white">
-                                <span className="material-symbols-outlined text-sm">send</span>
+                            <button
+                                type="submit"
+                                disabled={status === "loading"}
+                                className="bg-primary px-5 py-3 hover:bg-secondary transition-colors text-white disabled:opacity-50"
+                            >
+                                {status === "loading" ? (
+                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                ) : (
+                                    <span className="material-symbols-outlined text-sm">send</span>
+                                )}
                             </button>
-                        </div>
+                        </form>
+                        {message && (
+                            <p className={`mt-2 text-[10px] uppercase font-bold tracking-widest ${status === "success" ? "text-green-500" : "text-red-500"}`}>
+                                {message}
+                            </p>
+                        )}
                     </div>
                 </div>
 

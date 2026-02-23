@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  role          String    @default("ADMIN")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Product {
+  id               String         @id @default(cuid())
+  name             String
+  price            Float
+  stock            Int            @default(0)
+  description      String?
+  fullDescription  String?
+  category         String?
+  badge            String?
+  image            String?
+  gallery          String[]       // Array of image URLs
+  options          String[]       // Array of strings for options like "120ml"
+  surfaces         String[]       // Array of surfaces
+  specs            Json?          // Dynamic key-value pairs
+  rating           Float          @default(5.0)
+  reviewsCount     Int            @default(0)
+  applicationSteps Json?          // List of steps with title and desc
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  orderItems       OrderItem[]
+}
+
+model DistributorRequest {
+  id              String   @id @default(cuid())
+  name            String
+  lastName        String
+  email           String
+  phone           String
+  city            String
+  message         String
+  syncedToSheets  Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  customerName    String
+  email           String
+  phone           String?
+  city            String?
+  address         String?
+  total           Float
+  status          String      @default("PENDING") // PENDING, PAID, SHIPPED, COMPLETED, CANCELLED
+  wompiId         String?     @unique
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  name      String
+  price     Float
+  quantity  Int
+  option    String?
+}

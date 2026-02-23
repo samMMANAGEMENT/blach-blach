@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { SITE_CONTENT } from '@/configs/content';
+import { useRouter } from 'next/navigation';
+import { signIn, getSession } from 'next-auth/react';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -12,6 +14,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     const { auth } = SITE_CONTENT;
     const [isLogin, setIsLogin] = useState(true);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (isOpen) {
@@ -28,10 +37,64 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     const content = isLogin ? auth.login : auth.register;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert(`${isLogin ? 'Inicio de sesión' : 'Registro'} exitoso (Demo)`);
-        onClose();
+        setError('');
+        setIsLoading(true);
+
+        try {
+            if (isLogin) {
+                const result = await signIn('credentials', {
+                    email,
+                    password,
+                    redirect: false,
+                });
+
+                if (result?.error) {
+                    setError('Credenciales incorrectas');
+                } else {
+                    // Check user role to redirect if admin
+                    const session = await getSession();
+                    if (session?.user && (session.user as any).role === 'ADMIN') {
+                        onClose();
+                        router.push('/admin/dashboard');
+                    } else {
+                        onClose();
+                        window.location.reload(); // Refresh to update session state for regular users
+                    }
+                }
+            } else {
+                if (password !== confirmPassword) {
+                    setError('Las contraseñas no coinciden');
+                    setIsLoading(false);
+                    return;
+                }
+
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    setError(data.message || 'Error en el registro');
+                } else {
+                    // Automatically log in after registration
+                    await signIn('credentials', {
+                        email,
+                        password,
+                        callbackUrl: '/',
+                    });
+                    onClose();
+                }
+            }
+        } catch (err) {
+            setError('Ocurrió un error inesperado');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -70,27 +133,61 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in-up">
+                        {error && (
+                            <div className="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold py-3 px-4 rounded-lg text-center animate-pulse uppercase tracking-wider">
+                                {error}
+                            </div>
+                        )}
+
                         {!isLogin && (
                             <div className="space-y-1.5">
                                 <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">{auth.register.fields.name}</label>
-                                <input required className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700" type="text" placeholder="John Doe" />
+                                <input
+                                    required
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700"
+                                    type="text"
+                                    placeholder="John Doe"
+                                />
                             </div>
                         )}
 
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">{auth.login.fields.email}</label>
-                            <input required className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700" type="email" placeholder="example@email.com" />
+                            <input
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700"
+                                type="email"
+                                placeholder="example@email.com"
+                            />
                         </div>
 
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">{auth.login.fields.password}</label>
-                            <input required className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700" type="password" placeholder="••••••••" />
+                            <input
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700"
+                                type="password"
+                                placeholder="••••••••"
+                            />
                         </div>
 
                         {!isLogin && (
                             <div className="space-y-1.5">
                                 <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">{auth.register.fields.confirmPassword}</label>
-                                <input required className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700" type="password" placeholder="••••••••" />
+                                <input
+                                    required
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-4 text-sm text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-700"
+                                    type="password"
+                                    placeholder="••••••••"
+                                />
                             </div>
                         )}
 
@@ -103,10 +200,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         )}
 
                         <button
+                            disabled={isLoading}
                             type="submit"
-                            className="w-full bg-primary hover:bg-secondary text-white font-display font-black py-5 rounded-lg uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 mt-6 italic"
+                            className="w-full bg-primary hover:bg-secondary text-white font-display font-black py-5 rounded-lg uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 mt-6 italic disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {content.cta}
+                            {isLoading ? 'Cargando...' : content.cta}
                         </button>
                     </form>
 

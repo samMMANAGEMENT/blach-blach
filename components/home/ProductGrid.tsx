@@ -1,7 +1,11 @@
-import { SITE_CONTENT } from "@/configs/content";
+import prisma from "@/lib/prisma";
 import ProductCard from "./ProductCard";
 
-export default function ProductGrid() {
+export default async function ProductGrid() {
+    const products = await prisma.product.findMany({
+        orderBy: { createdAt: 'asc' }
+    });
+
     return (
         <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="productos">
             <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
@@ -17,8 +21,8 @@ export default function ProductGrid() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {SITE_CONTENT.products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                {products.map((product: any) => (
+                    <ProductCard key={product.id} product={product as any} />
                 ))}
             </div>
         </section>

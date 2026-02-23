@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { formatPrice } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
 
 interface ProductInfoProps {
     product: {
+        id: string;
+        image: string;
         category: string;
         name: string;
         price: number;
@@ -16,6 +20,21 @@ interface ProductInfoProps {
 export default function ProductInfo({ product }: ProductInfoProps) {
     const [selectedOption, setSelectedOption] = useState(product.options[0]);
     const [quantity, setQuantity] = useState(1);
+    const { addToCart } = useCart();
+    const [isAdded, setIsAdded] = useState(false);
+
+    const handleAddToCart = () => {
+        addToCart({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            option: selectedOption,
+            quantity: quantity
+        });
+        setIsAdded(true);
+        setTimeout(() => setIsAdded(false), 2000);
+    };
 
     return (
         <div className="flex flex-col">
@@ -44,8 +63,8 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             </div>
 
             <div className="text-4xl font-black mb-10 text-white flex items-baseline gap-2">
-                ${product.price.toLocaleString()}
-                <span className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em]">USD</span>
+                {formatPrice(product.price)}
+                <span className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em]">COP</span>
             </div>
 
             <div className="space-y-8 mb-12">
@@ -59,8 +78,8 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                                 key={opt}
                                 onClick={() => setSelectedOption(opt)}
                                 className={`px-6 py-3 border-2 font-black text-xs transition-all uppercase tracking-widest ${selectedOption === opt
-                                        ? "border-primary bg-primary/10 text-primary"
-                                        : "border-zinc-800 text-zinc-400 hover:border-primary/50"
+                                    ? "border-primary bg-primary/10 text-primary"
+                                    : "border-zinc-800 text-zinc-400 hover:border-primary/50"
                                     }`}
                             >
                                 {opt}
@@ -81,9 +100,19 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                             className="px-5 py-3 hover:bg-zinc-800 text-white transition-colors font-black"
                         >+</button>
                     </div>
-                    <button className="flex-1 bg-primary hover:bg-secondary text-white font-display font-black uppercase tracking-[0.2em] py-4 px-8 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-3 skew-x-12-neg">
-                        <span className="material-symbols-outlined transform skew-x-12">shopping_bag</span>
-                        <span className="transform skew-x-12">Añadir al carrito</span>
+                    <button
+                        onClick={handleAddToCart}
+                        className={`flex-1 font-display font-black uppercase tracking-[0.2em] py-4 px-8 transition-all shadow-lg flex items-center justify-center gap-3 skew-x-12-neg ${isAdded
+                                ? "bg-green-600 text-white shadow-green-600/20"
+                                : "bg-primary hover:bg-secondary text-white shadow-primary/20"
+                            }`}
+                    >
+                        <span className="material-symbols-outlined transform skew-x-12">
+                            {isAdded ? "check_circle" : "shopping_bag"}
+                        </span>
+                        <span className="transform skew-x-12">
+                            {isAdded ? "¡Agregado!" : "Añadir al carrito"}
+                        </span>
                     </button>
                 </div>
             </div>

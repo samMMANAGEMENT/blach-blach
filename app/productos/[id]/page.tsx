@@ -1,4 +1,4 @@
-import { SITE_CONTENT } from "@/configs/content";
+import prisma from "@/lib/prisma";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ProductGallery from "@/components/product/ProductGallery";
@@ -10,9 +10,20 @@ interface PageProps {
     params: Promise<{ id: string }>;
 }
 
+export async function generateStaticParams() {
+    const products = await prisma.product.findMany({
+        select: { id: true }
+    });
+    return products.map((product: { id: string }) => ({
+        id: product.id,
+    }));
+}
+
 export default async function ProductPage({ params }: PageProps) {
     const { id } = await params;
-    const product = SITE_CONTENT.products.find((p) => p.id === id);
+    const product = await prisma.product.findUnique({
+        where: { id }
+    });
 
     if (!product) {
         notFound();
@@ -34,13 +45,15 @@ export default async function ProductPage({ params }: PageProps) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24">
                     <ProductGallery
-                        mainImage={product.image}
+                        mainImage={product.image || ""}
                         gallery={product.gallery || []}
                         name={product.name}
                     />
 
                     <ProductInfo
                         product={{
+                            id: product.id,
+                            image: product.image || "",
                             category: product.category || "General",
                             name: product.name,
                             price: product.price,
@@ -62,10 +75,4 @@ export default async function ProductPage({ params }: PageProps) {
             <Footer />
         </main>
     );
-}
-
-export async function generateStaticParams() {
-    return SITE_CONTENT.products.map((p) => ({
-        id: p.id,
-    }));
 }
