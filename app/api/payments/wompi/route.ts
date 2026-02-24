@@ -26,8 +26,9 @@ export async function POST(request: Request) {
         }
 
         // 2. Actualizar el estado de la orden en nuestra DB
-        // La referencia (reference) es nuestro Order ID
-        const orderId = transaction.reference;
+        // La referencia (reference) es nuestro Order ID (posiblemente con un sufijo de unicidad separado por "-")
+        const reference = transaction.reference;
+        const orderId = reference.split('-')[0];
 
         let newStatus = "PENDING";
         if (transaction.status === "APPROVED") newStatus = "PAID";

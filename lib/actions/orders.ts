@@ -49,13 +49,33 @@ export async function createOrder(customerData: {
 
 export async function getWompiPaymentData(orderId: string, amount: number) {
     try {
-        const signature = await generateWompiSignature(orderId, amount);
+        const amountInCents = Math.round(amount * 100);
+        // Generamos una referencia única por cada intento de pago para evitar errores en Wompi
+        // conservando el orderId original para el webhook (el separador "-" es preferido por Wompi)
+        const uniqueReference = `${orderId}-${Date.now()}`;
+
+        const signature = await generateWompiSignature(uniqueReference, amount);
+        const publicKey = process.env.WOMPI_PUBLIC_KEY;
+
+        if (!publicKey) {
+            throw new Error("WOMPI_PUBLIC_KEY no está configurada en el servidor");
+        }
+
+        console.log("--- WOMPI ACTION DEBUG ---");
+        console.log("OrderId:", orderId);
+        console.log("UniqueRef:", uniqueReference);
+        console.log("Sig:", signature);
+        console.log("--------------------------");
+
         return {
             success: true,
             signature,
-            publicKey: process.env.WOMPI_PUBLIC_KEY
+            amountInCents,
+            publicKey,
+            reference: uniqueReference
         };
     } catch (error: any) {
+        console.error("getWompiPaymentData Error:", error);
         return { success: false, error: error.message };
     }
 }

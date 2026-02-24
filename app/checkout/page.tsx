@@ -65,30 +65,65 @@ export default function CheckoutPage() {
         if (!orderId) return;
         setIsProcessing(true);
         try {
+            // 1. Obtener datos de pago del servidor
             const wompiData = await getWompiPaymentData(orderId, subtotal);
-            if (wompiData.success) {
-                const amountInCents = Math.round(subtotal * 100);
-                const checkout = new (window as any).WidgetCheckout({
-                    currency: 'COP',
-                    amountInCents: amountInCents,
-                    reference: orderId,
-                    publicKey: wompiData.publicKey,
-                    signature: { integrity: wompiData.signature },
-                    redirectUrl: `${window.location.origin}/admin/dashboard`, // TODO: Create a success page
-                });
 
-                checkout.open((result: any) => {
-                    const transaction = result.transaction;
-                    if (transaction.status === 'APPROVED') {
-                        clearCart();
-                        router.push('/admin/dashboard');
-                    }
-                });
+            if (wompiData.success) {
+                const cleanPhone = formData.phone.replace(/\D/g, '').slice(-10);
+                const cleanCity = formData.city.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const cleanAddress = formData.address.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                // 2. Crear un formulario dinámico para enviar los datos
+                // Esto es más robusto que construir la URL manualmente para evitar bloqueos de WAF/CloudFront
+                const form = document.createElement('form');
+                form.method = 'GET'; // Wompi Web Checkout usa GET
+                form.action = 'https://checkout.wompi.co/p/';
+
+                const addInput = (name: string, value: string) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                };
+
+                // Parámetros Obligatorios
+                addInput('public-key', wompiData.publicKey || '');
+                addInput('currency', 'COP');
+                addInput('amount-in-cents', (wompiData.amountInCents || 0).toString());
+                addInput('reference', wompiData.reference || '');
+                addInput('signature:integrity', wompiData.signature || '');
+
+                // Parámetros Opcionales (Simplificados para evitar bloqueos)
+                // IMPORTANTE: Wompi bloquea localhost en producción/test del Web Checkout.
+                // Si estamos en localhost, usamos una URL de fallback para evitar el 403 de CloudFront.
+                const redirectUrl = window.location.hostname === 'localhost'
+                    ? 'https://google.com' // Fallback para pruebas si es localhost
+                    : `${window.location.origin}/checkout/success?id=${orderId}`;
+
+                addInput('redirect-url', redirectUrl);
+                addInput('customer-data:email', formData.email);
+                addInput('customer-data:full-name', formData.customerName);
+                addInput('customer-data:phone-number', cleanPhone);
+                addInput('customer-data:phone-number-prefix', '+57');
+
+                // Datos de Envío (Solo campos permitidos)
+                addInput('shipping-address:address-line-1', cleanAddress);
+                addInput('shipping-address:city', cleanCity);
+                addInput('shipping-address:country', 'CO');
+                addInput('shipping-address:region', cleanCity);
+                addInput('shipping-address:phone-number', cleanPhone);
+
+                console.log("--- REDIRECCIONANDO A WOMPI (MODO FORM) ---");
+                console.log("Redirect URL usada:", redirectUrl);
+                document.body.appendChild(form);
+                form.submit();
             } else {
                 alert("Error preparando el pago: " + wompiData.error);
             }
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            console.error("Checkout handlePay Error:", error);
+            alert("Ocurrió un error al iniciar el pago. Por favor intenta de nuevo.");
         } finally {
             setIsProcessing(false);
         }
@@ -98,7 +133,7 @@ export default function CheckoutPage() {
 
     return (
         <main className="min-h-screen bg-black text-white">
-            <Script src="https://checkout.wompi.co/widget.js" strategy="afterInteractive" />
+
             <Navbar />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
@@ -197,9 +232,30 @@ export default function CheckoutPage() {
                                     <div className="bg-black border border-zinc-800 rounded-2xl p-6 space-y-4">
                                         <p className="text-[10px] font-bold text-white uppercase tracking-widest">Método de pago seguro</p>
                                         <div className="flex justify-center gap-4">
-                                            <Image src="https://wompi.com/assets/img/plan_tarifas/reglamento-ico.svg" alt="Tarjeta" width={40} height={25} className="object-contain" />
-                                            <Image src="https://wompi.com/assets/img/plan_tarifas/bcol-ico.svg" alt="Bancolombia" width={40} height={25} className="object-contain" />
-                                            <Image src="https://wompi.com/assets/img/plan_tarifas/pse-ico.svg" alt="PSE" width={40} height={40} className="object-contain" />
+                                            <Image
+                                                src="https://wompi.com/assets/img/plan_tarifas/reglamento-ico.svg"
+                                                alt="Tarjeta"
+                                                width={40}
+                                                height={25}
+                                                className="object-contain"
+                                                style={{ width: '40px', height: 'auto' }}
+                                            />
+                                            <Image
+                                                src="https://wompi.com/assets/img/plan_tarifas/bcol-ico.svg"
+                                                alt="Bancolombia"
+                                                width={40}
+                                                height={25}
+                                                className="object-contain"
+                                                style={{ width: '40px', height: 'auto' }}
+                                            />
+                                            <Image
+                                                src="https://wompi.com/assets/img/plan_tarifas/pse-ico.svg"
+                                                alt="PSE"
+                                                width={40}
+                                                height={40}
+                                                className="object-contain"
+                                                style={{ width: '40px', height: 'auto' }}
+                                            />
                                         </div>
                                         <button
                                             onClick={handlePay}
@@ -224,7 +280,13 @@ export default function CheckoutPage() {
                                 {cart.map((item) => (
                                     <div key={`${item.id}-${item.option}`} className="flex gap-4">
                                         <div className="w-16 h-16 bg-black border border-zinc-800 rounded-lg flex-shrink-0 relative overflow-hidden">
-                                            <Image src={item.image} alt={item.name} fill className="object-contain p-2" />
+                                            <Image
+                                                src={item.image}
+                                                alt={item.name}
+                                                fill
+                                                className="object-contain p-2"
+                                                sizes="64px"
+                                            />
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-xs font-black uppercase truncate text-zinc-200">{item.name}</p>

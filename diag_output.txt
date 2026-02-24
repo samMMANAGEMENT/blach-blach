@@ -1,0 +1,16 @@
+Environment Variables:
+WOMPI_PUBLIC_KEY: pub_test_DIbUMFVp5DPztAos28vkA46zla5HLVPS
+WOMPI_INTEGRITY_SECRET: CONFIGURED (starts with test_)
+--- WOMPI DEBUG ---
+Reference: test-ref-1771975662228
+Amount In Cents: 2900000
+Currency: COP
+Secret (first 5): test_
+Chain to hash: test-ref-17719756622282900000COPtest_integrity_wDm95UnCywxX4jDz2Gz2CV59RF42nEi2
+Generated Hash: a6342b3052f4579aaad2b301bda8b8c06674d2580c27d71b14c5e4bf2cabf1f9
+-------------------
+
+Sample calculation:
+Ref: test-ref-1771975662228
+Amount: 29000
+Signature: a6342b3052f4579aaad2b301bda8b8c06674d2580c27d71b14c5e4bf2cabf1f9
