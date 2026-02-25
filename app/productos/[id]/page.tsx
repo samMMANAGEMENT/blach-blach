@@ -65,10 +65,10 @@ export default async function ProductPage({ params }: PageProps) {
                 </div>
 
                 <ProductTabs
-                    description={product.fullDescription || product.description}
-                    applicationSteps={product.applicationSteps || []}
+                    description={product.fullDescription || product.description || ""}
+                    applicationSteps={(product.applicationSteps as any) || []}
                     surfaces={product.surfaces || []}
-                    specs={product.specs as any}
+                    specs={(product.specs as any) || {}}
                 />
             </div>
 
