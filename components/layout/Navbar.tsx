@@ -95,9 +95,6 @@ export default function Navbar() {
 
                         {/* Actions */}
                         <div className="flex items-center space-x-1 sm:space-x-4">
-                            <button className="p-2 hover:bg-zinc-800 rounded-full transition-colors text-white hidden sm:block">
-                                <span className="material-symbols-outlined">search</span>
-                            </button>
                             <button
                                 onClick={() => setIsDrawerOpen(true)}
                                 className="p-2 hover:bg-zinc-800 rounded-full transition-colors relative text-white"

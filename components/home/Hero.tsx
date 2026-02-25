@@ -18,12 +18,12 @@ export default function Hero() {
     };
 
     return (
-        <header className="relative hero-gradient h-[85vh] flex items-center overflow-hidden">
+        <header className="relative hero-gradient h-[85vh] flex items-center overflow-hidden md:pt-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
                 <div className="max-w-3xl">
                     <h1 className="font-display text-5xl md:text-7xl font-black text-white leading-tight mb-4 italic" style={{ animationDelay: '200ms' }}>
-                        {hero.title.accent} <span className="text-primary">{hero.title.main}</span><br />
-                        <span className="text-3xl md:text-5xl tracking-normal not-italic leading-0.5">{hero.title.subtitle}</span>
+                        {hero.title.accent} <span className="text-primary">{hero.title.main}</span>
+                        <span className="block text-3xl md:text-5xl tracking-tighter not-italic leading-[0.8] mt-4">{hero.title.subtitle}</span>
                     </h1>
 
                     <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-xl font-light" style={{ animationDelay: '400ms' }}>

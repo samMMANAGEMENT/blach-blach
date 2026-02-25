@@ -74,7 +74,7 @@ export default function DistributorModal({ isOpen, onClose }: DistributorModalPr
     };
 
     return (
-        <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`fixed inset-0 z-100 flex items-start sm:items-center justify-center p-4 overflow-y-auto transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/80 backdrop-blur-md"
@@ -82,7 +82,7 @@ export default function DistributorModal({ isOpen, onClose }: DistributorModalPr
             />
 
             {/* Modal Content */}
-            <div className={`relative w-full max-w-2xl bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
+            <div className={`relative w-full max-w-2xl bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh] transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
                 {/* Close Button */}
                 <button
                     onClick={onClose}
@@ -91,9 +91,9 @@ export default function DistributorModal({ isOpen, onClose }: DistributorModalPr
                     <span className="material-symbols-outlined">close</span>
                 </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-5 h-full">
+                <div className="grid grid-cols-1 md:grid-cols-5">
                     {/* Sidebar / Info */}
-                    <div className="md:col-span-2 bg-zinc-900/50 p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-zinc-800">
+                    <div className="md:col-span-2 bg-zinc-900/50 p-6 md:p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-zinc-800">
                         <div className="mb-8">
                             <span className="text-primary font-display font-black text-4xl italic leading-none">BLACH</span>
                             <br />
@@ -119,7 +119,7 @@ export default function DistributorModal({ isOpen, onClose }: DistributorModalPr
                     </div>
 
                     {/* Form */}
-                    <div className="md:col-span-3 p-8 md:p-10 bg-zinc-950">
+                    <div className="md:col-span-3 p-6 md:p-10 bg-zinc-950">
                         {status === 'success' ? (
                             <div className="h-full flex flex-col items-center justify-center text-center space-y-4 animate-fade-in">
                                 <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">

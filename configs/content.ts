@@ -3,12 +3,12 @@ export const SITE_CONTENT = {
         title: {
             accent: "BLACH",
             main: "BLACH",
-            subtitle: "RESTAURADOR PROFESIONAL"
+            subtitle: "Restaurador de partes negras y grises"
         },
-        description: "Devuelve el brillo original a tus plásticos negros y grises. Fórmula avanzada SIN GRASAS para interior y exterior.",
+        description: "Devuelve el brillo original a tus plásticos con nuestra fórmula avanzada. No grasoso I para uso interno y externo I Resistente al agua",
         cta: {
-            primary: "VER CATÁLOGO",
-            secondary: "NUESTROS USOS"
+            primary: "PRODUCTOS",
+            secondary: "¿CÓMO SE APLICA?"
         },
         stats: [
             { value: "+5", label: "AÑOS EN EL MERCADO" },
@@ -29,14 +29,21 @@ export const SITE_CONTENT = {
         },
         {
             icon: "water_drop",
-            title: "SIN GRASAS",
+            title: "SIN SENSACIÓN GRASOSA",
             description: "No atrae polvo ni deja residuos pegajosos."
         },
         {
             icon: "timer",
-            title: "DURADERO",
-            description: "Protección UV prolongada por semanas."
+            title: "RESISTENTE",
+            description: "Al agua y polvo."
         }
+    ],
+    applications: [
+        { icon: "directions_car", label: "Autos" },
+        { icon: "two_wheeler", label: "Motos" },
+        { icon: "tire_repair", label: "Llantas" },
+        { icon: "speed", label: "Tablero" },
+        { icon: "layers", label: "Empaques" }
     ],
     products: [
         {
@@ -153,7 +160,7 @@ export const SITE_CONTENT = {
     ],
     contact: {
         description: "¿LISTO PARA QUE TU AUTO LUZCA COMO NUEVO?",
-        sub: "Únete a los miles de entusiastas que ya confían en Blach Blach para el cuidado de sus vehículos."
+        sub: "Devuélvele el color original a las partes negras y grises de tu carro o moto. Blach Blach NO es grasoso, no mancha, no deja residuos pegajosos y su acabado es real, profundo y duradero."
     },
     distributor: {
         title: "¿Quieres ser Distribuidor?",

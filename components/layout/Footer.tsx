@@ -51,7 +51,8 @@ export default function Footer() {
                             <div className="w-20 h-1 bg-primary mt-2"></div>
                         </div>
                         <p className="text-sm text-gray-500 mb-8 leading-relaxed font-light">
-                            Líderes en restauración de plásticos automotrices. Tecnología alemana para el cuidado de tu motor y carrocería.
+                            Líderes en restauración de partes negras y grises en todo tipo de transporte.
+                            Producto 100% Colombiano.
                         </p>
                         <div className="flex space-x-5">
                             {/* Simple Social placeholders */}
@@ -73,7 +74,7 @@ export default function Footer() {
                     <div>
                         <h4 className="font-display font-black mb-8 uppercase tracking-[0.2em] text-xs text-white">Menú</h4>
                         <ul className="space-y-4 text-sm text-gray-400">
-                            {["Productos", "Nuestra Historia", "Blog de Detallado", "Preguntas Frecuentes"].map((item) => (
+                            {["Productos", "Nuestra Historia", "Preguntas Frecuentes"].map((item) => (
                                 <li key={item}>
                                     <Link href="#" className="hover:text-primary transition-colors inline-block">{item}</Link>
                                 </li>
