@@ -159,8 +159,13 @@ export const SITE_CONTENT = {
         }
     ],
     contact: {
-        description: "¿LISTO PARA QUE TU AUTO LUZCA COMO NUEVO?",
-        sub: "Devuélvele el color original a las partes negras y grises de tu carro o moto. Blach Blach NO es grasoso, no mancha, no deja residuos pegajosos y su acabado es real, profundo y duradero."
+        description: "¿QUÉ QUIERES RESTAURAR HOY?",
+        sub: "Devuélvele el color original a las partes negras y grises de tu carro o moto. Blach Blach NO es grasoso, no mancha, no deja residuos pegajosos y su acabado es real, profundo y duradero.",
+        buttons: {
+            car: "RESTAURAR MI AUTO",
+            moto: "RESTAURAR MI MOTO",
+            distributor: "QUIERO SER DISTRIBUIDOR"
+        }
     },
     distributor: {
         title: "¿Quieres ser Distribuidor?",

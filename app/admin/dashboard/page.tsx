@@ -17,19 +17,19 @@ export default async function AdminDashboardPage() {
     ]);
 
     return (
-        <div className="min-h-screen bg-zinc-950 text-white p-8">
+        <div className="min-h-screen bg-zinc-950 text-white p-4 sm:p-8">
             <div className="max-w-7xl mx-auto">
-                <header className="flex justify-between items-center mb-12 animate-fade-in">
+                <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 animate-fade-in text-left">
                     <div>
-                        <h1 className="text-3xl font-display font-black italic uppercase text-primary">Panel de Control</h1>
+                        <h1 className="text-2xl sm:text-3xl font-display font-black italic uppercase text-primary">Panel de Control</h1>
                         <p className="text-zinc-500 mt-1">Bienvenido, {session.user?.name}</p>
                     </div>
 
                     <form action={async () => {
                         "use server";
                         await signOut({ redirectTo: "/admin/login" });
-                    }}>
-                        <button className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 px-6 py-2 rounded-lg text-sm font-bold transition-all">
+                    }} className="w-full sm:w-auto">
+                        <button className="w-full sm:w-auto bg-zinc-900 lg:hover:bg-zinc-800 border border-zinc-800 px-6 py-2.5 rounded-lg text-sm font-bold transition-all">
                             Cerrar Sesión
                         </button>
                     </form>
@@ -44,18 +44,6 @@ export default async function AdminDashboardPage() {
                     <StatCard title="Newsletter" value="0" icon="mail" />
                 </div>
 
-                <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                    <h2 className="text-xl font-bold mb-6 uppercase tracking-widest text-zinc-400">Próximos Pasos</h2>
-                    <div className="space-y-4">
-                        <div className="flex gap-4 p-4 bg-zinc-950 border border-zinc-800 rounded-xl">
-                            <span className="material-symbols-outlined text-primary">database</span>
-                            <div>
-                                <h3 className="font-bold">Configurar Base de Datos</h3>
-                                <p className="text-sm text-zinc-500">Asegúrate de tener una instancia de PostgreSQL y ejecuta las migraciones de Prisma.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );

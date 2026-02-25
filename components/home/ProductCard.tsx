@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getGoogleDriveDirectLink, isGoogleDriveLink } from "@/lib/utils";
 
 import { useCart } from "@/context/CartContext";
 
@@ -48,11 +48,12 @@ export default function ProductCard({ product }: ProductProps) {
                         </span>
                         <div className="relative w-3/4 h-3/4 group-hover:scale-110 transition-transform duration-500 z-10">
                             <Image
-                                src={product.image}
+                                src={getGoogleDriveDirectLink(product.image)}
                                 alt={product.name}
                                 fill
                                 className="object-contain"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                unoptimized={isGoogleDriveLink(product.image)}
                             />
                         </div>
                     </div>

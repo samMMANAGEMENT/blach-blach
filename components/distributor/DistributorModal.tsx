@@ -74,15 +74,15 @@ export default function DistributorModal({ isOpen, onClose }: DistributorModalPr
     };
 
     return (
-        <div className={`fixed inset-0 z-100 flex items-start sm:items-center justify-center p-4 overflow-y-auto transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`fixed inset-0 z-100 flex items-start sm:items-center justify-center sm:p-4 overflow-y-auto transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                className="absolute inset-0 bg-black/80 backdrop-blur-md hidden sm:block"
                 onClick={onClose}
             />
 
             {/* Modal Content */}
-            <div className={`relative w-full max-w-2xl bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh] transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}>
+            <div className={`relative w-full max-w-2xl bg-zinc-950 border-0 sm:border border-zinc-800 rounded-none sm:rounded-2xl shadow-2xl overflow-y-auto min-h-screen sm:min-h-0 sm:max-h-[90vh] transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0' : 'scale-100 translate-y-full sm:scale-95 sm:translate-y-4'}`}>
                 {/* Close Button */}
                 <button
                     onClick={onClose}

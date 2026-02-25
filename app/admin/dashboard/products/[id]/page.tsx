@@ -89,7 +89,7 @@ export default function ProductEditorPage() {
     if (isLoading) return <div className="min-h-screen bg-zinc-950 flex items-center justify-center font-display italic text-primary animate-pulse">CARGANDO EDITOR...</div>;
 
     return (
-        <div className="min-h-screen bg-zinc-950 text-white p-8">
+        <div className="min-h-screen bg-zinc-950 text-white p-4 sm:p-8">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <header className="flex justify-between items-center mb-12">
@@ -115,7 +115,7 @@ export default function ProductEditorPage() {
                     )}
 
                     {/* Basic Info Container */}
-                    <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 space-y-6">
+                    <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 sm:p-8 space-y-6">
                         <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-zinc-500 mb-6 border-b border-zinc-800 pb-4">Información General</h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -161,8 +161,8 @@ export default function ProductEditorPage() {
                     </div>
 
                     {/* Options and Surfaces */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 sm:p-8 space-y-6">
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">Presentaciones (Ej: 120ml)</h2>
                                 <button type="button" onClick={() => setFormData(prev => ({ ...prev, options: [...prev.options, ""] }))} className="text-primary text-[10px] font-black uppercase flex items-center gap-1"><span className="material-symbols-outlined text-sm">add</span> Añadir</button>
@@ -181,7 +181,7 @@ export default function ProductEditorPage() {
                             </div>
                         </div>
 
-                        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 space-y-6">
+                        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 sm:p-8 space-y-6">
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">Superficies (Ej: Tableros)</h2>
                                 <button type="button" onClick={() => setFormData(prev => ({ ...prev, surfaces: [...prev.surfaces, ""] }))} className="text-primary text-[10px] font-black uppercase flex items-center gap-1"><span className="material-symbols-outlined text-sm">add</span> Añadir</button>
@@ -202,15 +202,15 @@ export default function ProductEditorPage() {
                     </div>
 
                     {/* Application Steps */}
-                    <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 space-y-6">
+                    <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 sm:p-8 space-y-6">
                         <div className="flex justify-between items-center mb-6 border-b border-zinc-800 pb-4">
                             <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-zinc-500">Pasos de Aplicación</h2>
                             <button type="button" onClick={() => setFormData(prev => ({ ...prev, applicationSteps: [...prev.applicationSteps, { title: "", desc: "" }] }))} className="text-primary text-[10px] font-black uppercase flex items-center gap-1"><span className="material-symbols-outlined text-sm">add</span> Añadir Paso</button>
                         </div>
                         <div className="space-y-6">
                             {formData.applicationSteps.map((step, i) => (
-                                <div key={i} className="bg-zinc-950 p-6 rounded-xl border border-zinc-800 space-y-4 relative group">
-                                    <button type="button" onClick={() => setFormData(prev => ({ ...prev, applicationSteps: prev.applicationSteps.filter((_, idx) => idx !== i) }))} className="absolute top-4 right-4 text-zinc-600 hover:text-primary opacity-0 group-hover:opacity-100 transition-all"><span className="material-symbols-outlined text-sm">delete</span></button>
+                                <div key={i} className="bg-zinc-950 p-4 sm:p-6 rounded-xl border border-zinc-800 space-y-4 relative group">
+                                    <button type="button" onClick={() => setFormData(prev => ({ ...prev, applicationSteps: prev.applicationSteps.filter((_, idx) => idx !== i) }))} className="absolute top-4 right-4 text-zinc-600 hover:text-primary opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all"><span className="material-symbols-outlined text-sm">delete</span></button>
                                     <div className="space-y-2">
                                         <label className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">Título del Paso {i + 1}</label>
                                         <input value={step.title} onChange={(e) => {
@@ -233,7 +233,7 @@ export default function ProductEditorPage() {
                     </div>
 
                     {/* Technical Specs & Gallery */}
-                    <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 space-y-6">
+                    <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 sm:p-8 space-y-6">
                         <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-zinc-500 mb-6 border-b border-zinc-800 pb-4">Detalles Técnicos y Galería</h2>
 
                         <div className="space-y-2">
@@ -311,18 +311,18 @@ export default function ProductEditorPage() {
                     </div>
 
                     {/* Form Controls */}
-                    <div className="flex gap-4 pt-4">
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
                         <button
                             type="button"
                             onClick={() => router.push('/admin/dashboard/products')}
-                            className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-5 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all"
+                            className="w-full sm:flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-5 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all"
                         >
                             Descartar Cambios
                         </button>
                         <button
                             disabled={isSaving}
                             type="submit"
-                            className="flex-2 bg-primary hover:bg-secondary text-white font-display font-black py-5 rounded-2xl uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 italic"
+                            className="w-full sm:flex-2 bg-primary hover:bg-secondary text-white font-display font-black py-5 rounded-2xl uppercase tracking-[0.2em] text-sm shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 italic"
                         >
                             {isSaving ? 'GUARDANDO...' : isNew ? 'CREAR PRODUCTO' : 'ACTUALIZAR PRODUCTO'}
                         </button>

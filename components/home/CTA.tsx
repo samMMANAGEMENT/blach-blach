@@ -1,7 +1,12 @@
+"use client";
+
+import Link from "next/link";
+import { useUI } from "@/context/UIContext";
 import { SITE_CONTENT } from "@/configs/content";
 
 export default function CTA() {
     const { contact } = SITE_CONTENT;
+    const { setDistributorModalOpen } = useUI();
 
     return (
         <section className="bg-primary py-24 overflow-hidden relative">
@@ -19,11 +24,35 @@ export default function CTA() {
                 <p className="text-white/80 text-lg mb-12 max-w-2xl mx-auto font-light">
                     {contact.sub}
                 </p>
-                <button className="bg-white text-primary hover:bg-zinc-100 font-display font-black py-5 px-14 transition-all transform hover:scale-105 skew-x-12-neg group">
-                    <span className="inline-block transform skew-x-12 uppercase tracking-widest">
-                        COMPRAR AHORA
-                    </span>
-                </button>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link
+                        href="#productos"
+                        className="w-full sm:w-auto bg-white text-black hover:bg-zinc-100 font-display font-black py-4 px-10 transition-all transform hover:scale-105 skew-x-12-neg group"
+                    >
+                        <span className="inline-block transform skew-x-12 uppercase tracking-widest text-sm">
+                            {contact.buttons?.car}
+                        </span>
+                    </Link>
+
+                    <Link
+                        href="#productos"
+                        className="w-full sm:w-auto bg-white text-black hover:bg-zinc-100 font-display font-black py-4 px-10 transition-all transform hover:scale-105 skew-x-12-neg group"
+                    >
+                        <span className="inline-block transform skew-x-12 uppercase tracking-widest text-sm">
+                            {contact.buttons?.moto}
+                        </span>
+                    </Link>
+
+                    <button
+                        onClick={() => setDistributorModalOpen(true)}
+                        className="w-full sm:w-auto bg-zinc-950 text-white hover:bg-black font-display font-black py-4 px-10 transition-all transform hover:scale-105 skew-x-12-neg group border border-white/20"
+                    >
+                        <span className="inline-block transform skew-x-12 uppercase tracking-widest text-sm">
+                            {contact.buttons?.distributor}
+                        </span>
+                    </button>
+                </div>
             </div>
         </section>
     );

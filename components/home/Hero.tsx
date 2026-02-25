@@ -26,9 +26,16 @@ export default function Hero() {
                         <span className="block text-3xl md:text-5xl tracking-tighter not-italic leading-[0.8] mt-4">{hero.title.subtitle}</span>
                     </h1>
 
-                    <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-xl font-light" style={{ animationDelay: '400ms' }}>
-                        {hero.description}
-                    </p>
+                    <div className="mb-10 max-w-2xl" style={{ animationDelay: '400ms' }}>
+                        <p className="text-gray-400 text-lg md:text-xl font-light mb-6 leading-relaxed">
+                            {hero.description.split('. ')[0]}.
+                        </p>
+                        <div className="inline-flex items-center gap-3 border-l-4 border-primary py-3 px-6 rounded-r-sm">
+                            <span className="text-white text-sm md:text-base font-black uppercase tracking-[0.15em]">
+                                {hero.description.split('. ')[1]}
+                            </span>
+                        </div>
+                    </div>
 
                     <div className="flex flex-col sm:flex-row gap-4" style={{ animationDelay: '600ms' }}>
                         <Link

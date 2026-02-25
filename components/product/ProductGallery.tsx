@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { getGoogleDriveDirectLink, isGoogleDriveLink } from "@/lib/utils";
 
 interface ProductGalleryProps {
     mainImage: string;
@@ -25,12 +26,13 @@ export default function ProductGallery({ mainImage, gallery, name }: ProductGall
                 {activeImage && (
                     <div className="relative w-full h-full p-8 z-10">
                         <Image
-                            src={activeImage}
+                            src={getGoogleDriveDirectLink(activeImage)}
                             alt={name}
                             fill
                             className="object-contain group-hover:scale-105 transition-transform duration-500"
                             priority
                             sizes="(max-width: 1024px) 100vw, 50vw"
+                            unoptimized={isGoogleDriveLink(activeImage)}
                         />
                     </div>
                 )}
@@ -51,11 +53,12 @@ export default function ProductGallery({ mainImage, gallery, name }: ProductGall
                         {img && (
                             <div className={`w-full h-full relative p-2 ${activeImage === img ? "opacity-100" : "opacity-50"}`}>
                                 <Image
-                                    src={img}
+                                    src={getGoogleDriveDirectLink(img)}
                                     alt={`${name} thumbnail ${idx + 1}`}
                                     fill
                                     className="object-contain"
                                     sizes="120px"
+                                    unoptimized={isGoogleDriveLink(img)}
                                 />
                             </div>
                         )}
