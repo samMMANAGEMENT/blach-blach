@@ -26,7 +26,13 @@ En tu plataforma de despliegue, configura las siguientes variables con sus valor
 
 ---
 
-## 3. Configuración en el Dashboard de Wompi
+## 3. Automatización de Prisma
+He configurado un script de `postinstall` en el `package.json`. Esto significa que cada vez que instales dependencias (`npm install` o `pnpm install`), Prisma generará el cliente automáticamente. Esto evita el error común: 
+> *Type error: Module '"@prisma/client"' has no exported member 'PrismaClient'*
+
+---
+
+## 4. Configuración en el Dashboard de Wompi
 Para que los pagos sean aceptados y procesados, debes configurar tu cuenta de Wompi así:
 
 ### A. Whitelist de Dominios
