@@ -18,7 +18,7 @@ export default function Hero() {
     };
 
     return (
-        <header className="relative hero-gradient h-[85vh] flex items-center overflow-hidden md:pt-10">
+        <header className="relative hero-gradient h-[85vh] flex items-center overflow-hidden md:pt-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
                 <div className="max-w-3xl">
                     <h1 className="font-display text-5xl md:text-7xl font-black text-white leading-tight mb-4 italic" style={{ animationDelay: '200ms' }}>
